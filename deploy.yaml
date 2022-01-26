@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: challenge
+  labels:
+    app: myapp
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: challenge2
+        image: localhost:2424/challenge2
+        imagePullPolicy: Always
+        env:
+        - name: CODE
+          valueFrom: 
+            configMapKeyRef:
+              name: challengecmap
+              key: code
+        - name: NAME
+          valueFrom: 
+            configMapKeyRef:
+              name: challengecmap
+              key: name
+        ports:
+        - containerPort: 3535
+        livenessProbe:
+          httpGet:
+            path: /stat
+            port: 3535
+          initialDelaySeconds: 300
+          timeoutSeconds: 3
+        readinessProbe:
+          httpGet: 
+            path: /stat
+            port: 3535

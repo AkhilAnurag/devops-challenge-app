@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: challenge      
+  name: challengecmap
+data:
+  code: maracuja
+  name: akhil
